@@ -20,7 +20,7 @@ class Board
         Board(int rows, int cols) : rows(rows), cols(cols) { grid.resize(rows, vector<shared_ptr<Tile>>(cols)); } //Construtor
         virtual ~Board() {}; //Destrutor
 
-        void initialize(int difficulty); //Inicializa os tiles, decidindo quais serão bombas e quais serão vazios
+        void initialize(int numBombs); //Inicializa os tiles, decidindo quais serão bombas e quais serão vazios
         void revealTile(int row, int col);
         void calculateAdjacentBombs(); //Calcula a quantidade de bombas adjacentes para os tiles vazios
         void displayBoard() const;
