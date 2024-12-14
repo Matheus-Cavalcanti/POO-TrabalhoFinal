@@ -1,0 +1,34 @@
+#pragma once
+#include <vector>
+#include <memory>
+#include <SFML/Graphics.hpp>
+#include "Tile.hpp"
+
+#define TILE_SIZE 16
+#define SCREEN_RESIZE 4 
+
+using namespace std;
+
+class Board
+{
+    private:
+        int rows;
+        int cols;
+        vector<vector<shared_ptr<Tile>>> grid; //Matriz de ponteiros para Tile
+
+    public:
+        Board(int rows, int cols) : rows(rows), cols(cols) { grid.resize(rows, vector<shared_ptr<Tile>>(cols)); } //Construtor
+        virtual ~Board() {}; //Destrutor
+
+        void initialize(int difficulty); //Inicializa os tiles, decidindo quais serão bombas e quais serão vazios
+        void revealTile(int row, int col);
+        void calculateAdjacentBombs(); //Calcula a quantidade de bombas adjacentes para os tiles vazios
+        void displayBoard() const;
+
+        //Getters
+        int getRows() const { return rows; }
+        int getCols() const { return cols; }
+ 
+        //Funções do SFML
+        void draw(sf::RenderWindow& window); //Desenha o tabuleiro
+};
