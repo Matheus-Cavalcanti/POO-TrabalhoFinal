@@ -1,6 +1,8 @@
 #pragma once //Proteção de múltipla inclusão
 #include <string>
 
+#define TILE_SIZE 16
+
 using namespace std;
 
 class Tile
@@ -18,8 +20,8 @@ class Tile
         //Getters
         bool isRevealed() const { return revealed; }
         bool isFlagged() const { return flagged; }
-        int getX() { return x; }
-        int getY() { return y; }
+        int getX() const { return x; }
+        int getY() const { return y; }
 
         //Setters
         void reveal() { revealed = true; }
@@ -29,7 +31,6 @@ class Tile
 
         virtual string display() const = 0; 
         virtual void draw(sf::RenderWindow& window, float posX, float posY) const = 0; //Método virtual para exibição do tile no tabuleiro
-        //Ainda não decidi se essa função vai continuar existindo ou o que vai fazer
 };
 
 //Todos os métodos da classe são inline, portanto, não há a necessidade de um arquivo de implementação .cpp

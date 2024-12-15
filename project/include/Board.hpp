@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "Tile.hpp"
 
-#define TILE_SIZE 16
 #define SCREEN_RESIZE 4 
 
 using namespace std;

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include <random>
 #include "../include/Board.hpp"
 #include "../include/EmptyTile.hpp"
@@ -8,16 +7,6 @@
 #define DEBUG 1
 
 using namespace std;
-
-void Board::displayBoard() const {
-    for (const auto& row : grid) {
-        for (const auto& tile : row) {
-            tile->reveal();
-            cout << tile->display() << " ";
-        }
-        cout << std::endl;
-    }
-}
 
 void Board::initialize(int numBombs) //Gera posições aleatórias para as bombas
 {
@@ -80,20 +69,39 @@ void Board::calculateAdjacentBombs() {
 
                     //Verifica se a posição vizinha está dentro dos limites e contém uma bomba
                     if (ni >= 0 && ni < rows && nj >= 0 && nj < cols) {
-                        if (std::dynamic_pointer_cast<BombTile>(grid[ni][nj])) {
+                        if (dynamic_pointer_cast<BombTile>(grid[ni][nj])) {
                             ++bombCount;
                         }
                     }
                 }
 
                 //Atualiza o número de bombas adjacentes no EmptyTile
-                auto emptyTile = std::dynamic_pointer_cast<EmptyTile>(grid[i][j]);
+                auto emptyTile = dynamic_pointer_cast<EmptyTile>(grid[i][j]);
                 emptyTile->setAdjacentBombs(bombCount);
             }
         }
     }
 }
 
+void Board::displayBoard() const {
+    for (const auto& row : grid) {
+        for (const auto& tile : row) {
+            //tile->reveal();
+            cout << tile->display() << " ";
+        }
+        cout << std::endl;
+    }
+}
+
+void Board::draw(sf::RenderWindow& window)
+{
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            //grid[i][j]->reveal();
+            grid[i][j]->draw(window, j * TILE_SIZE, i * TILE_SIZE);
+        }
+    }
+}
 
 void Board::revealTile(int row, int col)
 {
@@ -102,14 +110,4 @@ void Board::revealTile(int row, int col)
     }
 
     grid[row][col]->reveal();
-}
-
-void Board::draw(sf::RenderWindow& window)
-{
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            grid[i][j]->reveal();
-            grid[i][j]->draw(window, j * TILE_SIZE, i * TILE_SIZE);
-        }
-    }
 }

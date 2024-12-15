@@ -1,4 +1,6 @@
 #include <iostream>
+#include <algorithm>
+#include <cmath>
 #include <chrono>
 #include <SFML/Graphics.hpp>
 #include "../include/Board.hpp"
@@ -6,7 +8,7 @@
 #define FRAME_DURATION 16667
 
 //Por enquanto, pra compilar essa bosta tu executa isso
-//g++ main.cpp Board.cpp -lsfml-graphics -lsfml-window -lsfml-system
+//g++ main.cpp Board.cpp EmptyTile.cpp BombTile.cpp -lsfml-graphics -lsfml-window -lsfml-system
 
 int main() {
     //Pretendo passar toda essa lógica da main para a classe Game, só não sei como ainda
@@ -37,6 +39,7 @@ int main() {
                case sf::Event::Closed: //Janela fechada
                {
                     if (event.type == sf::Event::Closed) window.close();
+                    break;
                }
                
                case sf::Event::KeyReleased: //Tecla pressionada
@@ -46,11 +49,16 @@ int main() {
 
                case sf::Event::MouseButtonReleased: //Botão do mouse pressionado
                {
+                    //Recebe posição do mouse e arredonda para descobrir sobre qual tile está
+                    int mouseTileX = sf::Mouse::getPosition(window).x / TILE_SIZE / SCREEN_RESIZE;
+                    int mouseTileY = sf::Mouse::getPosition(window).y / TILE_SIZE / SCREEN_RESIZE;
+
                     switch (event.mouseButton.button)
                     {
                         case sf::Mouse::Left: //Botão esquerdo
                         {
-
+                            cout << "tile clicado: x - " << mouseTileX << " y - " << mouseTileY << endl;
+                            field.revealTile(mouseTileY, mouseTileX);
                         }
                         
                         case sf::Mouse::Right: //Botão direito
