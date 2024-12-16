@@ -15,6 +15,8 @@ class EmptyTile : public Tile
         string display() const override;
         void draw(sf::RenderWindow& window, float posX, float posY) const override;
 
+        sf::Color number_color(int number) const;
+
         //Getters
         int getAdjacentBombs() { return adjacentBombs; }
 
