@@ -11,6 +11,7 @@ class Game {
         sf::RenderWindow window;
         int rows, cols, bombs;
         int revealedCount = 0; // Contador de tiles revelados
+        sf::Time time_ref;
 
         unsigned int availableFlags;
         unsigned int correctFlags;
@@ -62,8 +63,8 @@ class Game {
             field = Board(rows, cols);
             field.initialize(bombs);
 
-            window.create(sf::VideoMode(cols * TILE_SIZE * SCREEN_RESIZE, rows * TILE_SIZE * SCREEN_RESIZE), "Campo Minado");
-            window.setView(sf::View(sf::FloatRect(0, 0, TILE_SIZE * cols, TILE_SIZE * rows)));
+            window.create(sf::VideoMode(cols * TILE_SIZE * SCREEN_RESIZE, (rows+1) * TILE_SIZE * SCREEN_RESIZE), "Campo Minado");
+            window.setView(sf::View(sf::FloatRect(0, 0, TILE_SIZE * cols, TILE_SIZE * (rows+1))));
         }
 
         void run() {
@@ -93,8 +94,13 @@ class Game {
                     }
                 } else if (state == Playing) {
                     auto start = std::chrono::high_resolution_clock::now();
+
+
+                    time_ref = sf::seconds(0);
                     Player player("adm");
+                    sf::Clock clock;
                     while (state == Playing && window.isOpen()) {
+                        time_ref = clock.getElapsedTime();
                         Events();
                         check_WL();
                         render_map();
