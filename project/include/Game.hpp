@@ -15,6 +15,14 @@ class Game {
         unsigned int availableFlags;
         unsigned int correctFlags;
 
+        enum GameState {
+            MainMenu,
+            DifficultyMenu,
+            Playing,
+            Exit
+        };
+
+        GameState state = MainMenu;
 
         void Events();
 
@@ -23,26 +31,86 @@ class Game {
         void check_WL();
 
         void render_map();
+
+        //Funções do menu
+        int mainMenu();           //Exibe o menu principal
+        int difficultyMenu();     //Exibe o menu de escolha de dificuldade
+        void displayScores();     //Exibição de scores
+
+
     public:
-        Game(int rows, int cols, int bombs) : field(rows, cols), rows(rows), cols(cols), bombs(bombs), availableFlags(bombs), correctFlags(0),
-        window(sf::VideoMode(TILE_SIZE * cols * SCREEN_RESIZE, TILE_SIZE * rows * SCREEN_RESIZE), "Campo Minado"){
+    /*
+        Game(int rows, int cols, int bombs) : field(rows, cols), rows(rows), cols(cols), bombs(bombs), availableFlags(bombs), correctFlags(0) {
+            window(sf::VideoMode(TILE_SIZE * cols * SCREEN_RESIZE, TILE_SIZE * rows * SCREEN_RESIZE), "Campo Minado"){
             window.setView(sf::View(sf::FloatRect(0, 0, TILE_SIZE * cols, TILE_SIZE * rows)));
             field.initialize(bombs);
         }
+    */
 
-        void run(){
-            auto start = std::chrono::high_resolution_clock::now();
-            Player player("adm");
-            while (window.isOpen()) {
-                Events();
-                check_WL();
-                render_map();
-            }
-            auto end = std::chrono::high_resolution_clock::now();
-
-            auto duration = std::chrono::duration_cast<std::chrono::seconds>(end- start).count(); // em segundos para facilitar as coisas
-            player.addScore(duration);
-            cout << player.getScore();
+        Game() : field(8, 8), rows(8), cols(8), bombs(10), availableFlags(10), correctFlags(0) {
+            window.create(sf::VideoMode(800, 600), "Campo Minado");
         }
+
+        void initialize(int rows, int cols, int bombs) {
+            this->rows = rows;
+            this->cols = cols;
+            this->bombs = bombs;
+            this->availableFlags = bombs;
+            this->correctFlags = 0;
+            this->revealedCount = 0;
+
+            field = Board(rows, cols);
+            field.initialize(bombs);
+
+            window.create(sf::VideoMode(cols * TILE_SIZE * SCREEN_RESIZE, rows * TILE_SIZE * SCREEN_RESIZE), "Campo Minado");
+            window.setView(sf::View(sf::FloatRect(0, 0, TILE_SIZE * cols, TILE_SIZE * rows)));
+        }
+
+        void run() {
+            while (window.isOpen()) {
+                if (state == MainMenu) {
+                    int choice = mainMenu();
+                    if (choice == 0) {
+                        state = DifficultyMenu;
+                    } else if (choice == 1) {
+                        //displayScores();
+                    } else if (choice == 2) {
+                        state = Exit;
+                    }
+                } else if (state == DifficultyMenu) {
+                    int difficulty = difficultyMenu();
+                    if (difficulty == 0) {
+                        initialize(8, 8, 10); //Fácil
+                        state = Playing;
+                    } else if (difficulty == 1) {
+                        initialize(16, 16, 40); //Médio
+                        state = Playing;
+                    } else if (difficulty == 2) {
+                        initialize(24, 24, 99); //Difícil
+                        state = Playing;
+                    } else {
+                        state = MainMenu;
+                    }
+                } else if (state == Playing) {
+                    auto start = std::chrono::high_resolution_clock::now();
+                    Player player("adm");
+                    while (state == Playing && window.isOpen()) {
+                        Events();
+                        check_WL();
+                        render_map();
+
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)) {
+                            state = MainMenu;
+                        }
+                    }
+                    auto end = std::chrono::high_resolution_clock::now();
+                    auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+                    player.addScore(duration);
+                } else if (state == Exit) {
+                    window.close();
+                }
+            }
+        }
+
         void flagInteraction(int row, int col);
 };
