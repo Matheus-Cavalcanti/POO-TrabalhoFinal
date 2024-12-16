@@ -123,13 +123,27 @@ int Game::mainMenu()
 {
     std::vector<std::string> menuItems = {
         "Jogar",
+        "Como Jogar",
         "Maiores Scores",
-        "Sair"
+        "Sair",
     };
 
     sf::Font font;
-    font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf");
+    font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
     int selectedIndex = 0;
+
+    // Carregar a textura de fundo
+    sf::Texture backgroundTexture;
+    backgroundTexture.loadFromFile("../assets/images/Menu.png");
+
+    sf::Sprite backgroundSprite;
+    backgroundSprite.setTexture(backgroundTexture);
+
+    backgroundSprite.setScale(
+        window.getSize().x / backgroundSprite.getGlobalBounds().width,
+        window.getSize().y / backgroundSprite.getGlobalBounds().height
+    );
+
 
     while (window.isOpen())
     {
@@ -157,12 +171,14 @@ int Game::mainMenu()
             }
         }
 
-        window.clear(sf::Color::Black);
+        window.clear();
+        
+        window.draw(backgroundSprite);
 
         for (size_t i = 0; i < menuItems.size(); ++i) {
-            sf::Text text(menuItems[i], font, 40);
+            sf::Text text(menuItems[i], font, 35);
             text.setFillColor(i == selectedIndex ? sf::Color::Yellow : sf::Color::White);
-            text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 150 + i * 60);
+            text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 275 + i * 70);
             window.draw(text);
         }
 
@@ -174,13 +190,27 @@ int Game::mainMenu()
 
 int Game::difficultyMenu() {
     std::vector<std::string> difficulties = {
-        "Facil (8x8, 10 Bombas)",
-        "Medio (16x16, 40 Bombas)",
-        "Dificil (24x24, 99 Bombas)"
+        "Facil",
+        "Medio",
+        "Dificil",
+        "Voltar"
     };
 
     sf::Font font;
-    font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf");
+    font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
+
+    // Carregar a textura de fundo
+    sf::Texture backgroundTexture;
+    backgroundTexture.loadFromFile("../assets/images/Menu.png");
+
+    sf::Sprite backgroundSprite;
+    backgroundSprite.setTexture(backgroundTexture);
+
+    backgroundSprite.setScale(
+        window.getSize().x / backgroundSprite.getGlobalBounds().width,
+        window.getSize().y / backgroundSprite.getGlobalBounds().height
+    );
+
 
     int selectedIndex = 0;
     window.create(sf::VideoMode(800, 600), "Escolha a Dificuldade");
@@ -202,12 +232,14 @@ int Game::difficultyMenu() {
             }
         }
 
-        window.clear(sf::Color::Black);
+        window.clear();
+
+        window.draw(backgroundSprite);
 
         for (size_t i = 0; i < difficulties.size(); ++i) {
             sf::Text text(difficulties[i], font, 40);
             text.setFillColor(i == selectedIndex ? sf::Color::Yellow : sf::Color::White);
-            text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 150 + i * 60);
+            text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 275 + i * 70);
             window.draw(text);
         }
 

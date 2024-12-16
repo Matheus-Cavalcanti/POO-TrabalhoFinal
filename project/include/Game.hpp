@@ -89,8 +89,10 @@ class Game {
                     if (choice == 0) {
                         state = DifficultyMenu;
                     } else if (choice == 1) {
-                        //displayScores();
+                        //displayInstructions();
                     } else if (choice == 2) {
+                        //displayScores();
+                    } else if (choice == 3) {
                         state = Exit;
                     }
                 } else if (state == DifficultyMenu) {
@@ -121,6 +123,7 @@ class Game {
                         render_map();
 
                         if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)) {
+
                             state = MainMenu;
                         }
                     }
