@@ -2,3 +2,4 @@
 /bin
 /build
 /save/scores.csv
+*.out
