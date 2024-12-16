@@ -1,8 +1,10 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Board.hpp"
 #include <chrono>
 #include "Player.hpp"
+#include "File.hpp"
 
 class Game {
 
@@ -67,7 +69,20 @@ class Game {
             window.setView(sf::View(sf::FloatRect(0, 0, TILE_SIZE * cols, TILE_SIZE * (rows+1))));
         }
 
+        std::string getDifficulty(int difficulty) {
+            if (difficulty == 0) {
+                return "easy";
+            } else if (difficulty == 1) {
+                return "medium";
+            } else if (difficulty == 2) {
+                return "hard";
+            } else {
+                return "Invalid difficulty"; // Caso o valor seja fora de 0, 1 ou 2
+            }
+        }
+
         void run() {
+            int difficulty;
             while (window.isOpen()) {
                 if (state == MainMenu) {
                     int choice = mainMenu();
@@ -79,7 +94,7 @@ class Game {
                         state = Exit;
                     }
                 } else if (state == DifficultyMenu) {
-                    int difficulty = difficultyMenu();
+                    difficulty = difficultyMenu();
                     if (difficulty == 0) {
                         initialize(8, 8, 10); //Fácil
                         state = Playing;
@@ -112,6 +127,8 @@ class Game {
                     auto end = std::chrono::high_resolution_clock::now();
                     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
                     player.addScore(duration);
+
+                    writeScoreToFile(getDifficulty(difficulty), player);
                 } else if (state == Exit) {
                     window.close();
                 }
