@@ -104,7 +104,7 @@ void Board::draw(sf::RenderWindow& window)
     }
 }
 
-void Board::revealTile(int row, int col){
+void Board::revealTile(int row, int col, int& revealed_Count){
     if(row < 0 || row >= rows || col < 0 || col >= cols){ // se estiver fora do tabuleiro ja criado
         return;
     }
@@ -121,6 +121,7 @@ void Board::revealTile(int row, int col){
 
     // o revela para o jogador caso contrario
     grid[row][col]->reveal();
+    revealed_Count++;
 
     auto emptyTile= dynamic_pointer_cast<EmptyTile>(grid[row][col]);
     if(emptyTile){ // se for numero ou espaco vazio
@@ -131,13 +132,14 @@ void Board::revealTile(int row, int col){
             for(int i= -1; i<= 1; i++){
                 for(int j= -1;j<= 1; j++){
                     if(i != 0 || j != 0){ // caso nao seja o mesmo quadrado
-                        revealTile(row + i, col + j);
+                        revealTile(row + i, col + j, revealed_Count);
                     }
                 }
             }
         }
     }
     else{ // eh bomba, interrompe a recursao 
+        revealed_Count=-1; // acaba o jogo com derrota
         return;
     }
 
