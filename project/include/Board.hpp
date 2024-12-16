@@ -20,7 +20,7 @@ class Board
         virtual ~Board() {}; //Destrutor
 
         void initialize(int numBombs); //Inicializa os tiles, decidindo quais serão bombas e quais serão vazios
-        void revealTile(int row, int col);
+        void revealTile(int row, int col, int& revealed_Count);
         void calculateAdjacentBombs(); //Calcula a quantidade de bombas adjacentes para os tiles vazios
         void displayBoard() const;
 

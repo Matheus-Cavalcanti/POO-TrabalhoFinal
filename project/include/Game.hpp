@@ -1,18 +1,35 @@
-#pragma once
+#include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Board.hpp"
-#include "Player.hpp"
 
-using namespace std;
+class Game {
 
-class Game
-{
     private:
-        Board board;
-        Player player;
-        enum Dificculty {easy = 1, medium = 2, hard = 3};
-        bool gameOver;
+        Board field;
+        sf::RenderWindow window;
+        int rows, cols, bombs;
+        int revealedCount = 0; // Contador de tiles revelados
+
+        void Events();
+
+        void event_Mouse_Click(const sf::Event::MouseButtonEvent& mouseButton);
+
+        void check_WL();
+
+        void render_map();
 
     public:
-        Game(int rows, int cols, const string& playerName);
-        void play(); //Gerencia o loop principal do jogo
+        Game(int rows, int cols, int bombs) : field(rows, cols), rows(rows), cols(cols), bombs(bombs), 
+        window(sf::VideoMode(TILE_SIZE * cols * SCREEN_RESIZE, TILE_SIZE * rows * SCREEN_RESIZE), "Campo Minado"){
+            window.setView(sf::View(sf::FloatRect(0, 0, TILE_SIZE * cols, TILE_SIZE * rows)));
+            field.initialize(bombs);
+        }
+
+        void run() {
+            while (window.isOpen()) {
+                Events();
+                check_WL();
+                render_map();
+            }
+        }
 };
