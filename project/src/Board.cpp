@@ -3,6 +3,7 @@
 #include "../include/Board.hpp"
 #include "../include/EmptyTile.hpp"
 #include "../include/BombTile.hpp"
+#include "../include/Game.hpp"
 
 #define DEBUG 1
 
@@ -103,11 +104,38 @@ void Board::draw(sf::RenderWindow& window)
     }
 }
 
-void Board::revealTile(int row, int col)
-{
-    if (row < 0 || row >= rows || col < 0 || col >= cols || grid[row][col]->isRevealed()) {
+void Board::revealTile(int row, int col){
+    if(row < 0 || row >= rows || col < 0 || col >= cols){ // se estiver fora do tabuleiro ja criado
         return;
     }
 
+    // se ja foi revelado entao nao o acessa de novo pois ja esta na recursao
+    if(grid[row][col]->isRevealed()){
+        return;
+    }
+
+    // o revela para o jogador caso contrario
     grid[row][col]->reveal();
+
+    auto emptyTile= dynamic_pointer_cast<EmptyTile>(grid[row][col]);
+    if(emptyTile){ // se for numero ou espaco vazio
+        if(emptyTile->getAdjacentBombs()> 0){ // se for numero
+            return;
+        }
+        else{ // eh espaco vazio, realizar recursao
+            for(int i= -1; i<= 1; i++){
+                for(int j= -1;j<= 1; j++){
+                    if(i != 0 || j != 0){ // caso nao seja o mesmo quadrado
+                        revealTile(row + i, col + j);
+                    }
+                }
+            }
+        }
+    }
+    else{ // eh bomba, interrompe a recursao 
+        return;
+    }
+
 }
+
+    

@@ -13,7 +13,7 @@
 int main() {
     //Pretendo passar toda essa lógica da main para a classe Game, só não sei como ainda
 
-    Board field(16, 16); // amo amo voce
+    Board field(16, 16);
     field.initialize(30);
 
     //unsigned delay = 0;
