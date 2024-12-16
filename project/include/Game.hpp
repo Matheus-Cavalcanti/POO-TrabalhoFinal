@@ -1,8 +1,10 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Board.hpp"
 #include <chrono>
 #include "Player.hpp"
+#include "File.hpp"
 
 class Game {
 
@@ -33,7 +35,7 @@ class Game {
         void run(){
             auto start = std::chrono::high_resolution_clock::now();
             Player player("adm");
-            while (window.isOpen()) {
+            while (window.isOpen()){
                 Events();
                 check_WL();
                 render_map();
@@ -42,7 +44,9 @@ class Game {
 
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(end- start).count(); // em segundos para facilitar as coisas
             player.addScore(duration);
-            cout << player.getScore();
+            
+            writeScoreToFile("easy", player ); // quando as dificuldades existirem mudar aq e fazer o check_WL retornar o inteiro de vit ou derrota para contar
+            // apenas o score da vitoria, no momento ta os 2 por motivos de debbug 
         }
         void flagInteraction(int row, int col);
 };
