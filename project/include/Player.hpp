@@ -14,4 +14,5 @@ public:
     int getScore() const { return score; }
 
     string getName() const { return name; }
+    
 };

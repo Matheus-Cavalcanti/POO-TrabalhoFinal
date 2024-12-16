@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "../include/Board.hpp"
-#include "../include/Player.hpp"
+#include "Board.hpp"
+#include <chrono>
+#include "Player.hpp"
 
 class Game {
 
@@ -29,12 +30,19 @@ class Game {
             field.initialize(bombs);
         }
 
-        void run() {
+        void run(){
+            auto start = std::chrono::high_resolution_clock::now();
+            Player player("adm");
             while (window.isOpen()) {
                 Events();
                 check_WL();
                 render_map();
             }
+            auto end = std::chrono::high_resolution_clock::now();
+
+            auto duration = std::chrono::duration_cast<std::chrono::seconds>(end- start).count(); // em segundos para facilitar as coisas
+            player.addScore(duration);
+            cout << player.getScore();
         }
         void flagInteraction(int row, int col);
 };
