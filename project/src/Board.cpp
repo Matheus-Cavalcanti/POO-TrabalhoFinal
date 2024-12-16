@@ -114,6 +114,11 @@ void Board::revealTile(int row, int col, int& revealed_Count){
         return;
     }
 
+    //Pula se estiver flagged
+    if(grid[row][col]->isFlagged()) {
+        return;
+    }
+
     // o revela para o jogador caso contrario
     grid[row][col]->reveal();
     revealed_Count++;
@@ -139,5 +144,3 @@ void Board::revealTile(int row, int col, int& revealed_Count){
     }
 
 }
-
-    
