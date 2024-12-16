@@ -1,4 +1,5 @@
 #include <random>
+#include <stdio.h>
 #include "../include/Board.hpp"
 #include "../include/EmptyTile.hpp"
 #include "../include/BombTile.hpp"
@@ -6,6 +7,7 @@
 
 void Game::Events(){
 	sf::Event event;
+
     while(window.pollEvent(event)){
         switch(event.type){
             case sf::Event::Closed:
@@ -15,7 +17,6 @@ void Game::Events(){
             case sf::Event::MouseButtonReleased:
                 event_Mouse_Click(event.mouseButton);
                 break;
-
             default:
                 break;
         }
@@ -58,6 +59,24 @@ void Game::check_WL()
 void Game::render_map()
 {
     window.clear();
+
+    // Imprime o quadrado debaixo
+    sf::RectangleShape shape(sf::Vector2f(TILE_SIZE*cols, TILE_SIZE));
+    shape.setPosition(0, TILE_SIZE*cols);
+    shape.setFillColor(sf::Color(3, 16, 151));
+    window.draw(shape);
+
+    sf::Font font;
+    font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
+    string str_text = "Tempo: ";
+    string literal_time = to_string(int(time_ref.asSeconds()));
+    str_text.append(literal_time);
+
+    sf::Text time_text(str_text, font, 14);
+    time_text.setPosition(sf::Vector2f(0, TILE_SIZE*cols)); //Ajusta posição do texto
+    time_text.setFillColor(sf::Color::White);
+    window.draw(time_text);
+
     field.draw(window);
     window.display();
 }
