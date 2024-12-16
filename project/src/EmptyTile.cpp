@@ -20,6 +20,14 @@ void EmptyTile::draw(sf::RenderWindow& window, float posX, float posY) const {
         text.setFillColor(number_color(adjacentBombs));
         window.draw(text);
     }
+
+    if (flagged) {
+        sf::Font font;
+        font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
+        sf::Text text("F", font, 14);
+        text.setPosition(sf::Vector2f(posX, posY));
+        window.draw(text);
+    }
 }
 
 sf::Color EmptyTile::number_color(int number) const{ // especificacao igual ao do jogo original

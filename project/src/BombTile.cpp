@@ -10,4 +10,12 @@ void BombTile::draw(sf::RenderWindow& window, float posX, float posY) const {
     shape.setPosition(posX, posY);
     shape.setFillColor(revealed ? sf::Color::Red : sf::Color::Blue);
     window.draw(shape);
+
+    if (flagged) {
+        sf::Font font;
+        font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
+        sf::Text text("F", font, 14);
+        text.setPosition(sf::Vector2f(posX, posY));
+        window.draw(text);
+    }
 }

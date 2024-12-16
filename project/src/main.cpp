@@ -4,6 +4,7 @@
 #include <chrono>
 #include <SFML/Graphics.hpp>
 #include "../include/Board.hpp"
+#include "../include/Game.hpp"
 
 #define FRAME_DURATION 16667
 
@@ -13,6 +14,7 @@
 int main() {
     //Pretendo passar toda essa lógica da main para a classe Game, só não sei como ainda
 
+    Game game(16, 16, "Serj Tankian");
     Board field(16, 16);
     field.initialize(30);
 
@@ -63,7 +65,8 @@ int main() {
                         
                         case sf::Mouse::Right: //Botão direito
                         {
-
+                            cout << "flag em: x - " << mouseTileX << "y - " << mouseTileY << endl;
+                            game.flagInteraction(mouseTileY, mouseTileX);
                         }
                     }
                 }
