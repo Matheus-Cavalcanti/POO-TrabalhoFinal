@@ -22,9 +22,8 @@ void Game::Events(){
     }    
 } 
 
-void Game::event_Mouse_Click(const sf::Event::MouseButtonEvent &mouseButton){
-
-    
+void Game::event_Mouse_Click(const sf::Event::MouseButtonEvent &mouseButton)
+{
     int mouseTileX = sf::Mouse::getPosition(window).x / TILE_SIZE / SCREEN_RESIZE;
     int mouseTileY = sf::Mouse::getPosition(window).y / TILE_SIZE / SCREEN_RESIZE;
 
@@ -99,4 +98,102 @@ void Game::flagInteraction(int row, int col) {
     }
 
     return;
+}
+
+int Game::mainMenu()
+{
+    std::vector<std::string> menuItems = {
+        "Jogar",
+        "Maiores Scores",
+        "Sair"
+    };
+
+    sf::Font font;
+    font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf");
+    int selectedIndex = 0;
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                return -1;
+            }
+            else if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Up)
+                {
+                    selectedIndex = (selectedIndex > 0) ? selectedIndex - 1 : menuItems.size() - 1;
+                }
+                else if (event.key.code == sf::Keyboard::Down)
+                {
+                    selectedIndex = (selectedIndex < menuItems.size() - 1) ? selectedIndex + 1 : 0;
+                }
+                else if (event.key.code == sf::Keyboard::Enter)
+                {
+                    return selectedIndex;
+                }
+            }
+        }
+
+        window.clear(sf::Color::Black);
+
+        for (size_t i = 0; i < menuItems.size(); ++i) {
+            sf::Text text(menuItems[i], font, 40);
+            text.setFillColor(i == selectedIndex ? sf::Color::Yellow : sf::Color::White);
+            text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 150 + i * 60);
+            window.draw(text);
+        }
+
+        window.display();
+    }
+
+    return -1;
+}
+
+int Game::difficultyMenu() {
+    std::vector<std::string> difficulties = {
+        "Facil (8x8, 10 Bombas)",
+        "Medio (16x16, 40 Bombas)",
+        "Dificil (24x24, 99 Bombas)"
+    };
+
+    sf::Font font;
+    font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf");
+
+    int selectedIndex = 0;
+    window.create(sf::VideoMode(800, 600), "Escolha a Dificuldade");
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return -1;
+            } else if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Up) {
+                    selectedIndex = (selectedIndex > 0) ? selectedIndex - 1 : difficulties.size() - 1;
+                } else if (event.key.code == sf::Keyboard::Down) {
+                    selectedIndex = (selectedIndex < difficulties.size() - 1) ? selectedIndex + 1 : 0;
+                } else if (event.key.code == sf::Keyboard::Enter) {
+                    return selectedIndex;
+                }
+            }
+        }
+
+        window.clear(sf::Color::Black);
+
+        for (size_t i = 0; i < difficulties.size(); ++i) {
+            sf::Text text(difficulties[i], font, 40);
+            text.setFillColor(i == selectedIndex ? sf::Color::Yellow : sf::Color::White);
+            text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 150 + i * 60);
+            window.draw(text);
+        }
+
+        window.display();
+    }
+
+    return -1;
 }

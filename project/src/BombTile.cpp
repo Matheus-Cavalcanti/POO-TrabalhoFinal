@@ -12,10 +12,15 @@ void BombTile::draw(sf::RenderWindow& window, float posX, float posY) const {
     window.draw(shape);
 
     if (flagged) {
-        sf::Font font;
-        font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
-        sf::Text text("F", font, 14);
-        text.setPosition(sf::Vector2f(posX, posY));
-        window.draw(text);
+        sf::Texture tex;
+        tex.loadFromFile("../assets/images/flag_sprite.png"); //Carrega a imagem
+
+        sf::Sprite sprite;
+        sprite.setTexture(tex);
+        sprite.setPosition(posX, posY);
+        sprite.scale(0.03, 0.03);
+        sprite.setOrigin(0.5, 0.5);
+
+        window.draw(sprite);
     }
 }
