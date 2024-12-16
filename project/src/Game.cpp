@@ -61,22 +61,25 @@ void Game::render_map()
     window.clear();
 
     // Imprime o quadrado debaixo
-    sf::RectangleShape shape(sf::Vector2f(TILE_SIZE*cols, TILE_SIZE));
+    sf::RectangleShape shape(sf::Vector2f(TILE_SIZE*cols, 2*TILE_SIZE));
     shape.setPosition(0, TILE_SIZE*cols);
     shape.setFillColor(sf::Color(3, 16, 151));
     window.draw(shape);
 
+    // Imprime timer
     sf::Font font;
     font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
     string str_text = "Tempo: ";
     string literal_time = to_string(int(time_ref.asSeconds()));
     str_text.append(literal_time);
 
-    sf::Text time_text(str_text, font, 14);
-    time_text.setPosition(sf::Vector2f(0, TILE_SIZE*cols)); //Ajusta posição do texto
+    sf::Text time_text(str_text, font, 9);
+    time_text.setPosition(0, int(TILE_SIZE*cols)-2); //Ajusta posição do texto
     time_text.setFillColor(sf::Color::White);
     window.draw(time_text);
 
+
+    
     field.draw(window);
     window.display();
 }

@@ -18,7 +18,7 @@ void BombTile::draw(sf::RenderWindow& window, float posX, float posY) const {
         sf::Sprite sprite;
         sprite.setTexture(tex);
         sprite.setPosition(posX, posY);
-        sprite.scale(0.03, 0.03);
+        sprite.scale(0.02, 0.02);
         sprite.setOrigin(0.5, 0.5);
 
         window.draw(sprite);
