@@ -38,8 +38,7 @@ class Game {
         //Funções do menu
         int mainMenu();           //Exibe o menu principal
         int difficultyMenu();     //Exibe o menu de escolha de dificuldade
-        int displayScores();     //Exibição de scores
-        int displayInstructions();
+        void displayScores();     //Exibição de scores
 
 
     public:
@@ -117,9 +116,9 @@ class Game {
                     if (choice == 0) {
                         state = DifficultyMenu;
                     } else if (choice == 1) {
-                        displayInstructions();
+                        //displayInstructions();
                     } else if (choice == 2) {
-                        displayScores();
+                        //displayScores();
                     } else if (choice == 3) {
                         state = Exit;
                     }
@@ -155,7 +154,6 @@ class Game {
                     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
                     player.addScore(duration);
                     field.revealAllBombs();
-                    render_map();
                     writeScoreToFile(getDifficulty(difficulty), player);
                     read_after_game();
 
