@@ -1,7 +1,7 @@
 #pragma once //Proteção de múltipla inclusão
 #include <string>
 
-#define TILE_SIZE 8
+#define TILE_SIZE 10
 
 using namespace std;
 

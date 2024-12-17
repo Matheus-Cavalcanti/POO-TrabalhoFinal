@@ -14,9 +14,9 @@ void EmptyTile::draw(sf::RenderWindow& window, float posX, float posY) const {
 
     if (revealed && adjacentBombs > 0) {
         sf::Font font;
-        font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
-        sf::Text text(to_string(adjacentBombs), font, 14);
-        text.setPosition(sf::Vector2f(posX, posY)); //Ajusta posição do texto
+        font.loadFromFile("../assets/fonts/Oswald-Bold.ttf"); //Carrega a fonte
+        sf::Text text(to_string(adjacentBombs), font, 9);
+        text.setPosition((int)posX+2.5, (int)posY-1); //Ajusta posição do texto
         text.setFillColor(number_color(adjacentBombs));
         window.draw(text);
     }
@@ -28,7 +28,7 @@ void EmptyTile::draw(sf::RenderWindow& window, float posX, float posY) const {
         sf::Sprite sprite;
         sprite.setTexture(tex);
         sprite.setPosition(posX, posY);
-        sprite.scale(0.03, 0.03);
+        sprite.scale(0.02, 0.02);
         sprite.setOrigin(0.5, 0.5);
 
         window.draw(sprite);

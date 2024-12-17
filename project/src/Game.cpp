@@ -32,6 +32,9 @@ void Game::event_Mouse_Click(const sf::Event::MouseButtonEvent &mouseButton)
 
     switch (mouseButton.button){
         case sf::Mouse::Left:
+            if(revealedCount == 0 && dynamic_pointer_cast<BombTile>(field.getTile(mouseTileY, mouseTileX))) {
+                gridChange(mouseTileY, mouseTileX);
+            }
             field.revealTile(mouseTileY, mouseTileX, revealedCount);
             break;
 
@@ -44,16 +47,17 @@ void Game::event_Mouse_Click(const sf::Event::MouseButtonEvent &mouseButton)
         }
 }
 
-void Game::check_WL()
+int Game::check_WL()
 {
     if(revealedCount==(rows * cols - bombs) || correctFlags == bombs){
         std::cout<< "DEBBUG SUCESSO\n";
-        window.close();
+        return 1;
     } 
     else if(revealedCount == -1){
         std::cout << "DEBBUG DERROTA\n";
-        window.close();
+        return -1;
     }
+    return 0;
 }
 
 void Game::render_map()
@@ -61,22 +65,25 @@ void Game::render_map()
     window.clear();
 
     // Imprime o quadrado debaixo
-    sf::RectangleShape shape(sf::Vector2f(TILE_SIZE*cols, TILE_SIZE));
+    sf::RectangleShape shape(sf::Vector2f(TILE_SIZE*cols, 2*TILE_SIZE));
     shape.setPosition(0, TILE_SIZE*cols);
     shape.setFillColor(sf::Color(3, 16, 151));
     window.draw(shape);
 
+    // Imprime timer
     sf::Font font;
     font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
     string str_text = "Tempo: ";
     string literal_time = to_string(int(time_ref.asSeconds()));
     str_text.append(literal_time);
 
-    sf::Text time_text(str_text, font, 14);
-    time_text.setPosition(sf::Vector2f(0, TILE_SIZE*cols)); //Ajusta posição do texto
+    sf::Text time_text(str_text, font, 9);
+    time_text.setPosition(0, int(TILE_SIZE*cols)-2); //Ajusta posição do texto
     time_text.setFillColor(sf::Color::White);
     window.draw(time_text);
 
+
+    
     field.draw(window);
     window.display();
 }
@@ -89,15 +96,12 @@ void Game::flagInteraction(int row, int col) {
     // Os testes estao todos em if pra caso eu tenha esquecido de alguma possibilidade
     shared_ptr<Tile> tilePtr = field.getTile(row, col);
     if(tilePtr->isRevealed()) {
-        cout << "ja revelado\n";
         return;
     }
 
     // Tile ja possui uma flag. Interacao de remocao da flag
     if(tilePtr->isFlagged()) {
         if(dynamic_pointer_cast<BombTile>(tilePtr)) correctFlags--;
-
-        cout << "remocao\n";
 
         availableFlags++;
         tilePtr->setFlag(false);
@@ -106,8 +110,6 @@ void Game::flagInteraction(int row, int col) {
 
     // Tile nao possui flag. Interacao de colocar flag
     if(!(tilePtr->isFlagged())) {
-
-        cout << "nova flag\n";
         if(availableFlags == 0) return;
         if(dynamic_pointer_cast<BombTile>(tilePtr)) correctFlags++;
 
@@ -121,6 +123,8 @@ void Game::flagInteraction(int row, int col) {
 
 int Game::mainMenu()
 {
+    
+    window.create(sf::VideoMode(800, 600), "Campo Minado");
     std::vector<std::string> menuItems = {
         "Jogar",
         "Como Jogar",
@@ -406,4 +410,33 @@ int Game::displayScores() {
     }
 
     return -1;
+}
+void Game::gridChange(int row, int col) {
+    int totalTiles = rows * cols, i = 0;
+    int new_col, new_row, pos;
+
+    vector<int> positions(totalTiles);
+    for (i = 0; i < totalTiles; ++i) positions[i] = i;
+
+    //Embaralha as posições para distribuir as bombas
+    random_device rd; //Fonte de números aleatórios
+    mt19937 g(rd());  //Gerador de números
+    shuffle(positions.begin(), positions.end(), g);
+
+    //Coloca as bombas no campo
+    i = 0;
+    do {
+        pos = positions[i];
+        new_row = pos / cols;
+        new_col = pos % cols;
+        i++;
+    }
+    while(dynamic_pointer_cast<BombTile>(field.getTile(new_row, new_col)));
+
+
+    field.setTile(row, col, 1);
+    field.setTile(new_row, new_col, 2);
+    field.calculateAdjacentBombs();
+
+    return;
 }

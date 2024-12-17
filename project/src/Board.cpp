@@ -144,3 +144,14 @@ void Board::revealTile(int row, int col, int& revealed_Count){
     }
 
 }
+
+// type 1 : vazio, type 2 : bomba
+void Board::setTile(int row, int col, int type) {
+    if(type == 1) {
+        grid[row][col] = make_shared<EmptyTile>();
+    }
+    else {
+        grid[row][col] = make_shared<BombTile>();
+    }
+    return;
+}
