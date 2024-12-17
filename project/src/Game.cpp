@@ -32,6 +32,9 @@ void Game::event_Mouse_Click(const sf::Event::MouseButtonEvent &mouseButton)
 
     switch (mouseButton.button){
         case sf::Mouse::Left:
+            if(revealedCount == 0 && dynamic_pointer_cast<BombTile>(field.getTile(mouseTileY, mouseTileX))) {
+                gridChange(mouseTileY, mouseTileX);
+            }
             field.revealTile(mouseTileY, mouseTileX, revealedCount);
             break;
 
@@ -92,15 +95,12 @@ void Game::flagInteraction(int row, int col) {
     // Os testes estao todos em if pra caso eu tenha esquecido de alguma possibilidade
     shared_ptr<Tile> tilePtr = field.getTile(row, col);
     if(tilePtr->isRevealed()) {
-        cout << "ja revelado\n";
         return;
     }
 
     // Tile ja possui uma flag. Interacao de remocao da flag
     if(tilePtr->isFlagged()) {
         if(dynamic_pointer_cast<BombTile>(tilePtr)) correctFlags--;
-
-        cout << "remocao\n";
 
         availableFlags++;
         tilePtr->setFlag(false);
@@ -109,8 +109,6 @@ void Game::flagInteraction(int row, int col) {
 
     // Tile nao possui flag. Interacao de colocar flag
     if(!(tilePtr->isFlagged())) {
-
-        cout << "nova flag\n";
         if(availableFlags == 0) return;
         if(dynamic_pointer_cast<BombTile>(tilePtr)) correctFlags++;
 
@@ -250,4 +248,34 @@ int Game::difficultyMenu() {
     }
 
     return -1;
+}
+
+void Game::gridChange(int row, int col) {
+    int totalTiles = rows * cols, i = 0;
+    int new_col, new_row, pos;
+
+    vector<int> positions(totalTiles);
+    for (i = 0; i < totalTiles; ++i) positions[i] = i;
+
+    //Embaralha as posições para distribuir as bombas
+    random_device rd; //Fonte de números aleatórios
+    mt19937 g(rd());  //Gerador de números
+    shuffle(positions.begin(), positions.end(), g);
+
+    //Coloca as bombas no campo
+    i = 0;
+    do {
+        pos = positions[i];
+        new_row = pos / cols;
+        new_col = pos % cols;
+        i++;
+    }
+    while(dynamic_pointer_cast<BombTile>(field.getTile(new_row, new_col)));
+
+
+    field.setTile(row, col, 1);
+    field.setTile(new_row, new_col, 2);
+    field.calculateAdjacentBombs();
+
+    return;
 }

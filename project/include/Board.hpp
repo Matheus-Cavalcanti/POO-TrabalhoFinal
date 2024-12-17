@@ -28,6 +28,9 @@ class Board
         int getRows() const { return rows; }
         int getCols() const { return cols; }
         shared_ptr<Tile> getTile(int row, int col) const { return grid[row][col]; }
+
+        //Setter
+        void setTile(int row, int col, int type); //Muda o tipo de tile;
  
         //Funções do SFML
         void draw(sf::RenderWindow& window); //Desenha o tabuleiro
