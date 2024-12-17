@@ -3,14 +3,11 @@
 #include <cmath>
 #include <chrono>
 #include <SFML/Graphics.hpp>
+#include <fstream>
 #include "../include/Board.hpp"
 #include "../include/Game.hpp"
 #include "../include/Player.hpp"
 #include "../include/File.hpp"
-
-#include <fstream>
-
-#define FRAME_DURATION 16667
 
 //Por enquanto, pra compilar essa bosta tu executa isso
 //g++ main.cpp Board.cpp EmptyTile.cpp BombTile.cpp Game.cpp file.cpp -lsfml-graphics -lsfml-window -lsfml-system

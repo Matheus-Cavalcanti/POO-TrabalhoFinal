@@ -1,0 +1,8 @@
+easy
+1 adm
+5 adm
+
+hard
+
+medium
+

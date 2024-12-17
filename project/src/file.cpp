@@ -4,10 +4,10 @@
 #include <vector>
 
 void open_file(){
-    std::ifstream fileCheck("main_file");
+    std::ifstream fileCheck("../save/scores.txt");
     
     if(!fileCheck.is_open()){  // Se o arquivo não existir, cria
-        std::ofstream file("main_file");
+        std::ofstream file("../save/scores.txt");
         file << "easy\n";
         file << "medium\n";
         file << "hard\n";
@@ -17,7 +17,7 @@ void open_file(){
 }
 
 void writeScoreToFile(const std::string& difficulty, const Player& player){
-    std::ifstream main_file_op("main_file"); // arquivo principal aberto
+    std::ifstream main_file_op("../save/scores.txt"); // arquivo principal aberto
 
     if(!main_file_op.is_open()){
         std::cout<<"Erro ao abrir o arquivo para leitura."<<std::endl;
@@ -53,7 +53,7 @@ void writeScoreToFile(const std::string& difficulty, const Player& player){
             ply_aux.addScore(score); // add score ao jogador
 
             std::string name;
-            std::getline(string_aux, name); // leitura do nome
+            std::getline(string_aux >> std::ws, name); // leitura do nome
             ply_aux.addName(name);
 
             list_players.push_back(ply_aux); // salva ele no vetor 
@@ -80,7 +80,7 @@ void writeScoreToFile(const std::string& difficulty, const Player& player){
     }
 
     // rescreve o arquivo completo
-    std::ofstream outfile("main_file", std::ios::trunc);
+    std::ofstream outfile("../save/scores.txt", std::ios::trunc);
     if(!outfile.is_open()){
         std::cerr << "Erro ao abrir o arquivo para escrita." << std::endl;
         exit(-1);

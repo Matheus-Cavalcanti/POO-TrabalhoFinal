@@ -38,7 +38,8 @@ class Game {
         //Funções do menu
         int mainMenu();           //Exibe o menu principal
         int difficultyMenu();     //Exibe o menu de escolha de dificuldade
-        void displayScores();     //Exibição de scores
+        int displayScores();     //Exibição de scores
+        int displayInstructions();
 
 
     public:
@@ -116,9 +117,9 @@ class Game {
                     if (choice == 0) {
                         state = DifficultyMenu;
                     } else if (choice == 1) {
-                        //displayInstructions();
+                        displayInstructions();
                     } else if (choice == 2) {
-                        //displayScores();
+                        displayScores();
                     } else if (choice == 3) {
                         state = Exit;
                     }
