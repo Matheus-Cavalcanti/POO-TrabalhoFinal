@@ -39,7 +39,8 @@ class Game {
         //Funções do menu
         int mainMenu();           //Exibe o menu principal
         int difficultyMenu();     //Exibe o menu de escolha de dificuldade
-        void displayScores();     //Exibição de scores
+        int displayScores();     //Exibição de scores
+        int displayInstructions();
 
 
     public:
@@ -51,7 +52,7 @@ class Game {
         }
     */
 
-        Game() : field(8, 8), rows(8), cols(8), bombs(10), availableFlags(10), correctFlags(0), again(1) {
+        Game() : field(8, 8), rows(8), cols(8), bombs(10), availableFlags(10), correctFlags(0), again(0) {
             window.create(sf::VideoMode(800, 600), "Campo Minado");
         }
 
