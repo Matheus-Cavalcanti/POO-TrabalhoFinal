@@ -323,33 +323,26 @@ int Game::displayInstructions() {
 }
 
 int Game::displayScores() {
-    // Carregar a fonte
     sf::Font font;
-    if (!font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf")) {
-        std::cerr << "Erro ao carregar a fonte!\n";
-        return -1;
-    }
+    font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
 
-    // Abrir o arquivo de scores
     std::ifstream file("../save/scores.txt");
-    if (!file.is_open()) {
-        std::cerr << "Erro ao abrir o arquivo de scores!\n";
-        return -1;
-    }
+    file.is_open();
 
-    // Variáveis auxiliares
+    //Variáveis auxiliares
     std::string line;
     std::string currentDifficulty;
     std::vector<std::string> easyScores;
     std::vector<std::string> mediumScores;
     std::vector<std::string> hardScores;
+    string returnText = "Voltar";
 
-    // Ler o arquivo linha por linha
+    //Lê o arquivo linha por linha
     while (std::getline(file, line)) {
         if (line == "easy" || line == "medium" || line == "hard") {
-            currentDifficulty = line;  // Define a dificuldade atual
+            currentDifficulty = line; //Define a dificuldade atual
         } else if (!line.empty()) {
-            // Armazenar a linha dependendo da dificuldade
+            //Armazena a linha dependendo da dificuldade
             if (currentDifficulty == "easy") {
                 easyScores.push_back(line);
             } else if (currentDifficulty == "medium") {
@@ -360,44 +353,60 @@ int Game::displayScores() {
         }
     }
 
-    file.close(); // Fecha o arquivo
+    file.close();
 
-    // Criar uma janela para exibir os scores
-    sf::RenderWindow scoreWindow(sf::VideoMode(800, 600), "Maiores Scores");
-    scoreWindow.setFramerateLimit(60);
+    //Carregar a textura de fundo
+    sf::Texture backgroundTexture;
+    backgroundTexture.loadFromFile("../assets/images/InstructionsAndScore.png");
 
-    while (scoreWindow.isOpen()) {
+    sf::Sprite backgroundSprite;
+    backgroundSprite.setTexture(backgroundTexture);
+
+    backgroundSprite.setScale(
+        window.getSize().x / backgroundSprite.getGlobalBounds().width,
+        window.getSize().y / backgroundSprite.getGlobalBounds().height
+    );
+
+    //Cria uma janela para exibir os scores
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Maiores jogadores de todos os tempos");
+
+    while (window.isOpen()) {
         sf::Event event;
-        while (scoreWindow.pollEvent(event)) {
-            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-                scoreWindow.close();
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) { //Fecha janela de scores
+                window.close();
+            } else if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Enter) {
+                    return 0;
+                }
             }
         }
 
-        // Limpa a janela
-        scoreWindow.clear(sf::Color::Black);
+        //Exibe o background
+        window.clear();
+        window.draw(backgroundSprite);
 
-        // Variáveis para posicionamento do texto
-        float yOffset = 50;  // Posição inicial no eixo Y
+        //Variáveis para posicionamento do texto
+        float yOffset = 50;  //Posição inicial no eixo Y
 
         // Função para desenhar os scores
         auto drawScores = [&](const std::string& difficulty, const std::vector<std::string>& scores) {
             sf::Text title(difficulty, font, 30);
             title.setFillColor(sf::Color::Yellow);
-            title.setPosition(50, yOffset);
-            scoreWindow.draw(title);
+            title.setPosition(window.getSize().x / 2.f - title.getGlobalBounds().width, yOffset);
+            window.draw(title);
 
-            yOffset += 40; // Espaço após o título
+            yOffset += 30; //Espaço após o título
 
             for (const auto& score : scores) {
-                sf::Text scoreText(score, font, 25);
+                sf::Text scoreText(score, font, 20);
                 scoreText.setFillColor(sf::Color::White);
-                scoreText.setPosition(70, yOffset);
-                scoreWindow.draw(scoreText);
-                yOffset += 30; // Espaço entre as linhas de score
+                scoreText.setPosition(window.getSize().x / 2.f - scoreText.getGlobalBounds().width, yOffset);
+                window.draw(scoreText);
+                yOffset += 20; //Espaço entre as linhas de score
             }
 
-            yOffset += 20; // Espaço extra entre dificuldades
+            yOffset += 10; //Espaço extra entre dificuldades
         };
 
         // Desenha os scores para cada dificuldade
@@ -405,8 +414,13 @@ int Game::displayScores() {
         drawScores("Medium", mediumScores);
         drawScores("Hard", hardScores);
 
+        sf::Text text(returnText, font, 40);
+        text.setFillColor(sf::Color::Yellow);
+        text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 490);
+        window.draw(text);
+
         // Exibe os elementos na tela
-        scoreWindow.display();
+        window.display();
     }
 
     return -1;
