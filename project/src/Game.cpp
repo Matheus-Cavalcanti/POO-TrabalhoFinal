@@ -132,12 +132,14 @@ int Game::mainMenu()
     font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
     int selectedIndex = 0;
 
-    // Carregar a textura de fundo
+    //Carregar a textura de fundo
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile("../assets/images/Menu.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);
+
+    window.create(sf::VideoMode(800, 600), "Escolha a Dificuldade");
 
     backgroundSprite.setScale(
         window.getSize().x / backgroundSprite.getGlobalBounds().width,
@@ -199,21 +201,20 @@ int Game::difficultyMenu() {
     sf::Font font;
     font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
 
-    // Carregar a textura de fundo
+    //Carregar a textura de fundo
     sf::Texture backgroundTexture;
     backgroundTexture.loadFromFile("../assets/images/Menu.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);
 
+    int selectedIndex = 0;
+    window.create(sf::VideoMode(800, 600), "Escolha a Dificuldade");
+
     backgroundSprite.setScale(
         window.getSize().x / backgroundSprite.getGlobalBounds().width,
         window.getSize().y / backgroundSprite.getGlobalBounds().height
     );
-
-
-    int selectedIndex = 0;
-    window.create(sf::VideoMode(800, 600), "Escolha a Dificuldade");
 
     while (window.isOpen()) {
         sf::Event event;
@@ -244,6 +245,164 @@ int Game::difficultyMenu() {
         }
 
         window.display();
+    }
+
+    return -1;
+}
+
+int Game::displayInstructions() {
+    std::vector<std::string> scores;
+
+    std::vector<std::string> texts = {
+        "A evolucao de um dos maiores jogos de todos os tempos chegou!",
+        "Campo Minado 2, agora duas vezes mais divertido!",
+        "Para jogar eh muito simples, basta clicar com o botao esquerdo", 
+        "para revelar um quadrado e clicar com o botao direito para",
+        "marcar um quadrado suspeito de bomba com uma bandeira.",
+        "Voce ganha ao marcar todas as bombas com bandeiras",
+        "ou revelar todos os quadrados sem bombas.",
+        "Aperte R a qualquer momento para reiniciar."
+    };
+
+    string returnText = "Voltar";
+
+    sf::Font font;
+    font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
+
+    //Carregar a textura de fundo
+    sf::Texture backgroundTexture;
+    backgroundTexture.loadFromFile("../assets/images/InstructionsAndScore.png");
+
+    sf::Sprite backgroundSprite;
+    backgroundSprite.setTexture(backgroundTexture);
+
+    backgroundSprite.setScale(
+        window.getSize().x / backgroundSprite.getGlobalBounds().width,
+        window.getSize().y / backgroundSprite.getGlobalBounds().height
+    );
+
+    window.create(sf::VideoMode(800, 600), "Aprenda a jogar");
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return -1;
+            } else if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Enter) {
+                    return 0;
+                }
+            }
+        }
+
+        window.clear();
+
+        window.draw(backgroundSprite);
+
+        for (size_t i = 0; i < texts.size(); ++i) {
+            sf::Text text(texts[i], font, 15);
+            text.setFillColor(sf::Color::White);
+            text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 100 + i * 35);
+            window.draw(text);
+        }
+
+        sf::Text text(returnText, font, 40);
+        text.setFillColor(sf::Color::Yellow);
+        text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 490);
+        window.draw(text);
+
+        window.display();
+    }
+
+    return -1;
+}
+
+int Game::displayScores() {
+    // Carregar a fonte
+    sf::Font font;
+    if (!font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf")) {
+        std::cerr << "Erro ao carregar a fonte!\n";
+        return -1;
+    }
+
+    // Abrir o arquivo de scores
+    std::ifstream file("../save/scores.txt");
+    if (!file.is_open()) {
+        std::cerr << "Erro ao abrir o arquivo de scores!\n";
+        return -1;
+    }
+
+    // Variáveis auxiliares
+    std::string line;
+    std::string currentDifficulty;
+    std::vector<std::string> easyScores;
+    std::vector<std::string> mediumScores;
+    std::vector<std::string> hardScores;
+
+    // Ler o arquivo linha por linha
+    while (std::getline(file, line)) {
+        if (line == "easy" || line == "medium" || line == "hard") {
+            currentDifficulty = line;  // Define a dificuldade atual
+        } else if (!line.empty()) {
+            // Armazenar a linha dependendo da dificuldade
+            if (currentDifficulty == "easy") {
+                easyScores.push_back(line);
+            } else if (currentDifficulty == "medium") {
+                mediumScores.push_back(line);
+            } else if (currentDifficulty == "hard") {
+                hardScores.push_back(line);
+            }
+        }
+    }
+
+    file.close(); // Fecha o arquivo
+
+    // Criar uma janela para exibir os scores
+    sf::RenderWindow scoreWindow(sf::VideoMode(800, 600), "Maiores Scores");
+    scoreWindow.setFramerateLimit(60);
+
+    while (scoreWindow.isOpen()) {
+        sf::Event event;
+        while (scoreWindow.pollEvent(event)) {
+            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+                scoreWindow.close();
+            }
+        }
+
+        // Limpa a janela
+        scoreWindow.clear(sf::Color::Black);
+
+        // Variáveis para posicionamento do texto
+        float yOffset = 50;  // Posição inicial no eixo Y
+
+        // Função para desenhar os scores
+        auto drawScores = [&](const std::string& difficulty, const std::vector<std::string>& scores) {
+            sf::Text title(difficulty, font, 30);
+            title.setFillColor(sf::Color::Yellow);
+            title.setPosition(50, yOffset);
+            scoreWindow.draw(title);
+
+            yOffset += 40; // Espaço após o título
+
+            for (const auto& score : scores) {
+                sf::Text scoreText(score, font, 25);
+                scoreText.setFillColor(sf::Color::White);
+                scoreText.setPosition(70, yOffset);
+                scoreWindow.draw(scoreText);
+                yOffset += 30; // Espaço entre as linhas de score
+            }
+
+            yOffset += 20; // Espaço extra entre dificuldades
+        };
+
+        // Desenha os scores para cada dificuldade
+        drawScores("Easy", easyScores);
+        drawScores("Medium", mediumScores);
+        drawScores("Hard", hardScores);
+
+        // Exibe os elementos na tela
+        scoreWindow.display();
     }
 
     return -1;
