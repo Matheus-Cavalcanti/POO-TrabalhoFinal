@@ -164,4 +164,6 @@ class Game {
         }
 
         void flagInteraction(int row, int col);
+
+        void gridChange(int row, int col); //Muda a posição de uma bomba. Chamada apenas se o primeiro clique for em uma bomba.
 };
