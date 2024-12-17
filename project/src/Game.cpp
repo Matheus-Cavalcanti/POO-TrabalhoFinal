@@ -94,9 +94,18 @@ void Game::render_map()
     str_text.append(literal_time);
 
     sf::Text time_text(str_text, font, 9);
-    time_text.setPosition(0, int(TILE_SIZE*cols)-2); //Ajusta posição do texto
+    time_text.setPosition(1, int(TILE_SIZE*cols)-1); //Ajusta posição do texto
     time_text.setFillColor(sf::Color::White);
     window.draw(time_text);
+
+    // Exibe a quantidade de flags
+    string str_flag = "Flags: ";
+    str_flag.append(to_string(availableFlags));
+
+    sf::Text flag_text(str_flag, font, 9);
+    flag_text.setPosition(int(TILE_SIZE*4)+2, int(TILE_SIZE*cols)-1);
+    flag_text.setFillColor(sf::Color::White);
+    window.draw(flag_text);
 
     // Exibe os quadradinhos
     field.draw(window);
