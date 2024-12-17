@@ -2,8 +2,14 @@
 #include "../include/Player.hpp"
 #include <map>
 #include <vector>
+#include <filesystem>
 
 void open_file(){
+    //Cria a pasta save caso não exista
+    if (!std::filesystem::exists("../save")) {
+        std::filesystem::create_directories("../save");
+    }
+
     std::ifstream fileCheck("../save/scores.txt");
     
     if(!fileCheck.is_open()){  // Se o arquivo não existir, cria
