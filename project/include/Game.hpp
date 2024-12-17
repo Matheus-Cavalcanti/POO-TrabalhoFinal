@@ -10,6 +10,7 @@ class Game {
 
     private:
         Board field;
+        Player player;
         sf::RenderWindow window;
         int rows, cols, bombs;
         int revealedCount = 0;          //Contador de tiles revelados
@@ -24,26 +25,11 @@ class Game {
             MainMenu,
             DifficultyMenu,
             Playing,
-            Exit
+            Exit,
+            NameMenu
         };
 
         GameState state = MainMenu;
-
-        //Lida com os eventos de interação do usuário
-        void Events();
-        //Eventos de clique de mouse (revelar ou bandeira)
-        void event_Mouse_Click(const sf::Event::MouseButtonEvent& mouseButton);
-        //Verifica se o jogo terminou (derrota ou vitoria)
-        int check_WL();
-        //Renderiza o mapa
-        void render_map();
-
-        //Funções do menu
-        int mainMenu();             //Exibe o menu principal
-        int difficultyMenu();       //Exibe o menu de escolha de dificuldade
-        int displayScores();        //Exibe os Scores
-        int displayInstructions();  //Exibe as instruções de jogo
-
     public:
 
         //Construtor
@@ -74,4 +60,20 @@ class Game {
 
         //Setter
         void set_again(int value) { again = value; }
+
+        //Lida com os eventos de interação do usuário
+        void Events();
+        //Eventos de clique de mouse (revelar ou bandeira)
+        void event_Mouse_Click(const sf::Event::MouseButtonEvent& mouseButton);
+        //Verifica se o jogo terminou (derrota ou vitoria)
+        int check_WL();
+        //Renderiza o mapa
+        void render_map();
+
+        //Funções do menu
+        int mainMenu();             //Exibe o menu principal
+        int difficultyMenu();       //Exibe o menu de escolha de dificuldade
+        int nameMenu();             //Recolhe as informações de nome do jogador
+        int displayScores();        //Exibe os Scores
+        int displayInstructions();  //Exibe as instruções de jogo
 };

@@ -143,6 +143,89 @@ int Game::difficultyMenu() {
     return -1;
 }
 
+//Recolhe as informações de nome do jogador
+int Game::nameMenu() {
+    int i = 0;
+    string strNext = "Confirmar";
+
+    sf::Font font;
+    font.loadFromFile("./assets/fonts/Orbitron-Bold.ttf");
+
+    //Carregar a textura de fundo
+    sf::Texture backgroundTexture;
+    backgroundTexture.loadFromFile("./assets/images/InstructionsAndScore.png");
+
+    sf::Sprite backgroundSprite;
+    backgroundSprite.setTexture(backgroundTexture);
+
+    //Texto do cabecalho
+    sf::String header = "Insira seu nome: ";
+    sf::Text headerText(header, font, 40);
+    headerText.setPosition(220, 135);
+    headerText.setFillColor(sf::Color::White);
+
+    //Texto do jogador
+    string playerInput = "";
+    sf::Text playerText("", font, 20);
+
+    playerText.setFillColor(sf::Color::White);
+
+    backgroundSprite.setScale(
+        window.getSize().x / backgroundSprite.getGlobalBounds().width,
+        window.getSize().y / backgroundSprite.getGlobalBounds().height
+    );
+
+    window.create(sf::VideoMode(800, 600), "Insira o nome:");
+
+    //Lida com os eventos
+    while (window.isOpen()) {
+        //Ajusta a posição do texto
+        playerText.setPosition(375-3*i, 220);
+        window.draw(backgroundSprite);
+        window.draw(headerText);
+
+        //Texto "Confirmar"
+        sf::Text text(strNext, font, 40);
+        text.setFillColor(sf::Color::Yellow);
+        text.setPosition(window.getSize().x / 2.f - text.getGlobalBounds().width / 2.f, 490);
+        window.draw(text);
+        
+        playerText.setString(playerInput);
+        window.draw(playerText);
+        window.display();
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            // Fechamento da janela
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return -1;
+            // Evento de enter (confirmar)
+            } else if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Enter) {
+                    player.addName(playerInput);
+                    return 0;
+                }
+            }
+            // Evento digitar texto
+            else if (event.type == sf::Event::TextEntered && event.text.unicode < 128 && playerInput.size() < 16) {
+                //Lida com backspace
+                if(event.text.unicode == 8) {
+                    playerInput.pop_back();
+                    i--;
+                }
+                else {
+                    playerInput += event.text.unicode;
+                    i++;
+                }
+                playerText.setString(playerInput);
+                window.draw(playerText);
+            }
+        }
+        window.clear();
+    }
+    return 0;
+}
+
 //Exibe as instruções de jogo
 int Game::displayInstructions() {
     std::vector<std::string> scores;

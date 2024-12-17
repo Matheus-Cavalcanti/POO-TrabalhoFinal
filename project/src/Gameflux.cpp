@@ -22,6 +22,16 @@ void Game::run() {
         } else if (state == DifficultyMenu) {
             //difficultyMenu() retorn a escolha de difculdade. Jogo é inicializado para cada dificuldade
             difficulty = difficultyMenu();
+
+            if(difficulty == -1) {
+                state = MainMenu;
+            }
+            else {
+                state = NameMenu;
+            }
+        //Jogador insere o nome
+        } else if (state == NameMenu) {
+            int retorno = nameMenu();
             if (difficulty == 0) {
                 initialize(8, 8, 10); //Fácil
                 state = Playing;
@@ -31,8 +41,8 @@ void Game::run() {
             } else if (difficulty == 2) {
                 initialize(24, 24, 99); //Difícil
                 state = Playing;
-            } else {
-                state = MainMenu;
+            } if (retorno == -1) {
+                state = Exit;
             }
         //Caso o jogador já esteja jogando
         } else if (state == Playing) {
@@ -40,7 +50,6 @@ void Game::run() {
             auto start = std::chrono::high_resolution_clock::now();
 
             time_ref = sf::seconds(0);
-            Player player("adm");
             sf::Clock clock;
 
             //Chamada das funções de comportamento do jogador durante o jogo (Events());
@@ -63,7 +72,7 @@ void Game::run() {
             field.revealAllBombs();
             render_map();
             //Salva o score
-            writeScoreToFile(getDifficulty(difficulty), player);
+            if(ganhou == 1) writeScoreToFile(getDifficulty(difficulty), player);
             read_after_game();
             window.close();
             return;
