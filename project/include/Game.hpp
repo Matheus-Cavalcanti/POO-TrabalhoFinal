@@ -39,9 +39,8 @@ class Game {
         //Funções do menu
         int mainMenu();           //Exibe o menu principal
         int difficultyMenu();     //Exibe o menu de escolha de dificuldade
-        int displayScores();     //Exibição de scores
+        int displayScores();
         int displayInstructions();
-
 
     public:
     /*

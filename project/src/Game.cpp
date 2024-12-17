@@ -521,9 +521,9 @@ void Game::run() {
             if (choice == 0) {
                 state = DifficultyMenu;
             } else if (choice == 1) {
-                //displayInstructions();
+                displayInstructions();
             } else if (choice == 2) {
-                //displayScores();
+                displayScores();
             } else if (choice == 3) {
                 state = Exit;
             }
@@ -558,7 +558,8 @@ void Game::run() {
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
             player.addScore(duration);
-
+            field.revealAllBombs();
+            render_map();
             writeScoreToFile(getDifficulty(difficulty), player);
             read_after_game();
             window.close();

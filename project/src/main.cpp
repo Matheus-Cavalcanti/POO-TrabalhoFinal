@@ -13,7 +13,7 @@
 //g++ main.cpp Board.cpp EmptyTile.cpp BombTile.cpp Game.cpp file.cpp -lsfml-graphics -lsfml-window -lsfml-system
 
 int main(){
-    while(1) {
+    while(1){
         open_file();
         Game game;
         game.run();
