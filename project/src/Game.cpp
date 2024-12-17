@@ -558,7 +558,8 @@ void Game::run() {
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
             player.addScore(duration);
-
+            field.revealAllBombs();
+            render_map();
             writeScoreToFile(getDifficulty(difficulty), player);
             read_after_game();
             window.close();
