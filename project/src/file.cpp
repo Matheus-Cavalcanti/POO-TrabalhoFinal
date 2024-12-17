@@ -6,14 +6,14 @@
 
 void open_file(){
     //Cria a pasta save caso não exista
-    if (!std::filesystem::exists("../save")) {
-        std::filesystem::create_directories("../save");
+    if (!std::filesystem::exists("./save")) {
+        std::filesystem::create_directories("./save");
     }
 
-    std::ifstream fileCheck("../save/scores.txt");
+    std::ifstream fileCheck("./save/scores.txt");
     
     if(!fileCheck.is_open()){  // Se o arquivo não existir, cria
-        std::ofstream file("../save/scores.txt");
+        std::ofstream file("./save/scores.txt");
         file << "easy\n";
         file << "medium\n";
         file << "hard\n";
@@ -23,7 +23,7 @@ void open_file(){
 }
 
 void writeScoreToFile(const std::string& difficulty, const Player& player){
-    std::ifstream main_file_op("../save/scores.txt"); // arquivo principal aberto
+    std::ifstream main_file_op("./save/scores.txt"); // arquivo principal aberto
 
     //Mensagem de erro 
     if(!main_file_op.is_open()){
@@ -87,7 +87,7 @@ void writeScoreToFile(const std::string& difficulty, const Player& player){
     }
 
     // rescreve o arquivo completo
-    std::ofstream outfile("../save/scores.txt", std::ios::trunc);
+    std::ofstream outfile("./save/scores.txt", std::ios::trunc);
     if(!outfile.is_open()){
         std::cerr << "Erro ao abrir o arquivo para escrita." << std::endl;
         exit(-1);

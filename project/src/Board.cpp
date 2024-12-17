@@ -84,17 +84,6 @@ void Board::calculateAdjacentBombs() {
     }
 }
 
-//Exibição em ascii
-void Board::displayBoard() const {
-    for (const auto& row : grid) {
-        for (const auto& tile : row) {
-            //tile->reveal();
-            cout << tile->display() << " ";
-        }
-        cout << std::endl;
-    }
-}
-
 //Exibição gráfica
 void Board::draw(sf::RenderWindow& window)
 {

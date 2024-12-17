@@ -13,12 +13,12 @@ int Game::mainMenu()
     };
 
     sf::Font font;
-    font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
+    font.loadFromFile("./assets/fonts/Orbitron-Bold.ttf");
     int selectedIndex = 0;
 
     //Carregar a textura de fundo
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../assets/images/Menu.png");
+    backgroundTexture.loadFromFile("./assets/images/Menu.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);
@@ -87,11 +87,11 @@ int Game::difficultyMenu() {
     };
 
     sf::Font font;
-    font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
+    font.loadFromFile("./assets/fonts/Orbitron-Bold.ttf");
 
     //Carregar a textura de fundo
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../assets/images/Menu.png");
+    backgroundTexture.loadFromFile("./assets/images/Menu.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);
@@ -161,11 +161,11 @@ int Game::displayInstructions() {
     string returnText = "Voltar";
 
     sf::Font font;
-    font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
+    font.loadFromFile("./assets/fonts/Orbitron-Bold.ttf");
 
     //Carregar a textura de fundo
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../assets/images/InstructionsAndScore.png");
+    backgroundTexture.loadFromFile("./assets/images/InstructionsAndScore.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);
@@ -216,9 +216,9 @@ int Game::displayInstructions() {
 // Exibe as scores de quem venceu
 int Game::displayScores() {
     sf::Font font;
-    font.loadFromFile("../assets/fonts/Orbitron-Bold.ttf");
+    font.loadFromFile("./assets/fonts/Orbitron-Bold.ttf");
 
-    std::ifstream file("../save/scores.txt");
+    std::ifstream file("./save/scores.txt");
     file.is_open();
 
     //Variáveis auxiliares
@@ -249,7 +249,7 @@ int Game::displayScores() {
 
     //Carregar a textura de fundo
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../assets/images/InstructionsAndScore.png");
+    backgroundTexture.loadFromFile("./assets/images/InstructionsAndScore.png");
 
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);

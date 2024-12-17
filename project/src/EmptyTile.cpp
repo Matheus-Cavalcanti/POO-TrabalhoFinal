@@ -1,10 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "../include/EmptyTile.hpp"
 
-// Exibição em ascii no terminal
-string EmptyTile::display() const {
-    return revealed ? (adjacentBombs != 0 ? to_string(adjacentBombs) : "#") : (flagged ? "F" : ".");
-}
 
 //Exibição gráfica
 void EmptyTile::draw(sf::RenderWindow& window, float posX, float posY) const {
@@ -18,7 +14,7 @@ void EmptyTile::draw(sf::RenderWindow& window, float posX, float posY) const {
     //Tiles exibidos e com bombas perto exibem o número de bombas adjacentes
     if (revealed && adjacentBombs > 0) {
         sf::Font font;
-        font.loadFromFile("../assets/fonts/Oswald-Bold.ttf"); //Carrega a fonte
+        font.loadFromFile("./assets/fonts/Oswald-Bold.ttf"); //Carrega a fonte
         sf::Text text(to_string(adjacentBombs), font, 9);
         text.setPosition((int)posX+2.5, (int)posY-1); //Ajusta posição do texto
         text.setFillColor(number_color(adjacentBombs));
@@ -28,7 +24,7 @@ void EmptyTile::draw(sf::RenderWindow& window, float posX, float posY) const {
     //Tiles com flag exibem o sprite da flag
     if (flagged) {
         sf::Texture tex;
-        tex.loadFromFile("../assets/images/flag_sprite.png"); //Carrega a imagem
+        tex.loadFromFile("./assets/images/flag_sprite.png"); //Carrega a imagem
 
         sf::Sprite sprite;
         sprite.setTexture(tex);

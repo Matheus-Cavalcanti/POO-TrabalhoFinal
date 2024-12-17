@@ -29,7 +29,6 @@ class Tile
         void setX(int value) { x = value; }
         void setY(int value) { y = value; }
 
-        virtual string display() const = 0; 
         virtual void draw(sf::RenderWindow& window, float posX, float posY) const = 0; //Método virtual para exibição do tile no tabuleiro
 };
 

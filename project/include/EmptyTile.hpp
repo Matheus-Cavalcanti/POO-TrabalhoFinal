@@ -13,7 +13,6 @@ class EmptyTile : public Tile
         EmptyTile() : adjacentBombs(0) {} //Construtor
         virtual ~EmptyTile() {} //Destrutor
 
-        string display() const override; //Display em ascii
         void draw(sf::RenderWindow& window, float posX, float posY) const override; //Exibição gráfica
 
         sf::Color number_color(int number) const; //Retorna a cor de cada número

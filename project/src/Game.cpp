@@ -88,7 +88,7 @@ void Game::render_map()
 
     // Exibe o timer
     sf::Font font;
-    font.loadFromFile("../assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
+    font.loadFromFile("./assets/fonts/RobotoCondensed-Regular.ttf"); //Carrega a fonte
     string str_text = "Tempo: ";
     string literal_time = to_string(int(time_ref.asSeconds()));
     str_text.append(literal_time);
