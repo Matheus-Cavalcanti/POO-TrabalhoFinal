@@ -16,8 +16,14 @@
 //g++ main.cpp Board.cpp EmptyTile.cpp BombTile.cpp Game.cpp file.cpp -lsfml-graphics -lsfml-window -lsfml-system
 
 int main(){
-    open_file();
-    Game game; // fazer coisas de dificuldade dentro aq
-    game.run();            // roda tudo, temos que fazer jogo e tabuleiro rodando 2 coisas distintas
+    while(1) {
+        open_file();
+        Game game;
+        game.run();
+
+        if(!game.test_again()) break;
+
+    }
+
     return 0;
 }
