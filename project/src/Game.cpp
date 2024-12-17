@@ -44,16 +44,17 @@ void Game::event_Mouse_Click(const sf::Event::MouseButtonEvent &mouseButton)
         }
 }
 
-void Game::check_WL()
+int Game::check_WL()
 {
     if(revealedCount==(rows * cols - bombs) || correctFlags == bombs){
         std::cout<< "DEBBUG SUCESSO\n";
-        window.close();
+        return 1;
     } 
     else if(revealedCount == -1){
         std::cout << "DEBBUG DERROTA\n";
-        window.close();
+        return -1;
     }
+    return 0;
 }
 
 void Game::render_map()
@@ -121,6 +122,8 @@ void Game::flagInteraction(int row, int col) {
 
 int Game::mainMenu()
 {
+    
+    window.create(sf::VideoMode(800, 600), "Campo Minado");
     std::vector<std::string> menuItems = {
         "Jogar",
         "Como Jogar",

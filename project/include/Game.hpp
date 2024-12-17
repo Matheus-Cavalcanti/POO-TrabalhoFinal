@@ -31,7 +31,7 @@ class Game {
 
         void event_Mouse_Click(const sf::Event::MouseButtonEvent& mouseButton);
 
-        void check_WL();
+        int check_WL();
 
         void render_map();
 
@@ -81,9 +81,36 @@ class Game {
             }
         }
 
+        // Função que vai ler a entrada após o fim do jogo
+    void read_after_game(){
+        sf::Event event;
+        bool validInput= false;
+        while(!validInput && window.isOpen()){
+            while(window.pollEvent(event)){
+                if(event.type == sf::Event::Closed){
+                    window.close();
+                }
+                if(event.type == sf::Event::KeyPressed){
+                    if(event.key.code == sf::Keyboard::R){
+                        std::cout << "Reiniciando o jogo..." << std::endl;
+                        state = DifficultyMenu;
+                        validInput = true;
+                    }
+                    else if(event.key.code == sf::Keyboard::M){
+                        std::cout << "Voltando ao menu principal..." << std::endl;
+                        state = MainMenu;
+                        validInput = true;
+                    }
+                }
+            }
+        }
+    }
+
         void run() {
             int difficulty;
+            int ganhou=0;
             while (window.isOpen()) {
+                window.clear();
                 if (state == MainMenu) {
                     int choice = mainMenu();
                     if (choice == 0) {
@@ -116,22 +143,20 @@ class Game {
                     time_ref = sf::seconds(0);
                     Player player("adm");
                     sf::Clock clock;
-                    while (state == Playing && window.isOpen()) {
+                    while (state == Playing && window.isOpen() && ganhou==0) {
                         time_ref = clock.getElapsedTime();
                         Events();
-                        check_WL();
+                        ganhou= check_WL();
                         render_map();
 
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)) {
-
-                            state = MainMenu;
-                        }
                     }
                     auto end = std::chrono::high_resolution_clock::now();
                     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
                     player.addScore(duration);
 
                     writeScoreToFile(getDifficulty(difficulty), player);
+                    read_after_game();
+
                 } else if (state == Exit) {
                     window.close();
                 }
