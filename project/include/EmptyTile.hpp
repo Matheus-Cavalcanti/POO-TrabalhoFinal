@@ -3,19 +3,20 @@
 
 using namespace std;
 
+//Classe derivada para os Tiles livres
 class EmptyTile : public Tile
 {
     private:
-        int adjacentBombs;
+        int adjacentBombs; //Contagem das bombas imediatamente ao lado ou na diagonal.
 
     public:
         EmptyTile() : adjacentBombs(0) {} //Construtor
         virtual ~EmptyTile() {} //Destrutor
 
-        string display() const override;
-        void draw(sf::RenderWindow& window, float posX, float posY) const override;
+        string display() const override; //Display em ascii
+        void draw(sf::RenderWindow& window, float posX, float posY) const override; //Exibição gráfica
 
-        sf::Color number_color(int number) const;
+        sf::Color number_color(int number) const; //Retorna a cor de cada número
 
         //Getters
         int getAdjacentBombs() { return adjacentBombs; }

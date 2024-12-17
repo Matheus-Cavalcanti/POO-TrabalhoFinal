@@ -20,14 +20,14 @@ class Board
         virtual ~Board() {}; //Destrutor
 
         void initialize(int numBombs); //Inicializa os tiles, decidindo quais serão bombas e quais serão vazios
-        void revealTile(int row, int col, int& revealed_Count);
+        void revealTile(int row, int col, int& revealed_Count); //Revela o tile (vazio ou bomba);
         void calculateAdjacentBombs(); //Calcula a quantidade de bombas adjacentes para os tiles vazios
-        void displayBoard() const;
+        void displayBoard() const; //Exibe o tabuleiro em ascii (DEBUG)
 
         //Getters
         int getRows() const { return rows; }
         int getCols() const { return cols; }
-        shared_ptr<Tile> getTile(int row, int col) const { return grid[row][col]; }
+        shared_ptr<Tile> getTile(int row, int col) const { return grid[row][col]; } //Retorna o ponteiro para Tile na posição especificada
 
         //Setter
         void setTile(int row, int col, int type); //Muda o tipo de tile;
@@ -35,5 +35,5 @@ class Board
         //Funções do SFML
         void draw(sf::RenderWindow& window); //Desenha o tabuleiro
 
-        void revealAllBombs();
+        void revealAllBombs(); //Revela todas as bombas
 };

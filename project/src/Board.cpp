@@ -5,7 +5,7 @@
 #include "../include/BombTile.hpp"
 #include "../include/Game.hpp"
 
-#define DEBUG 1
+#define DEBUG 0
 
 using namespace std;
 
@@ -84,6 +84,7 @@ void Board::calculateAdjacentBombs() {
     }
 }
 
+//Exibição em ascii
 void Board::displayBoard() const {
     for (const auto& row : grid) {
         for (const auto& tile : row) {
@@ -94,19 +95,22 @@ void Board::displayBoard() const {
     }
 }
 
+//Exibição gráfica
 void Board::draw(sf::RenderWindow& window)
 {
+    //Opera desenhando cada tile.
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            //grid[i][j]->reveal();
             grid[i][j]->draw(window, j * TILE_SIZE, i * TILE_SIZE);
         }
     }
 }
 
+//Revela todas as bombas
 void Board::revealAllBombs() {
     for(int i = 0; i < rows; ++i){
         for(int j = 0; j < cols; ++j){
+            //Testa se o tile é bomba
             if (grid[i][j] && dynamic_pointer_cast<BombTile>(grid[i][j])){
                 grid[i][j]->reveal();
             }
@@ -114,13 +118,14 @@ void Board::revealAllBombs() {
     }
 }
 
+//Revela um Tile específico
 void Board::revealTile(int row, int col, int &revealed_Count)
 {
-    if(row < 0 || row >= rows || col < 0 || col >= cols){ // se estiver fora do tabuleiro ja criado
+    if(row < 0 || row >= rows || col < 0 || col >= cols){ //Caso esteja fora do tabuleiro ja criado
         return;
     }
 
-    // se ja foi revelado entao nao o acessa de novo pois ja esta na recursao
+    // Se ja foi revelado entao nao o acessa de novo pois ja esta na recursao
     if(grid[row][col]->isRevealed()){
         return;
     }
@@ -130,32 +135,34 @@ void Board::revealTile(int row, int col, int &revealed_Count)
         return;
     }
 
-    // o revela para o jogador caso contrario
+    //Revela para o jogador caso contrario
     grid[row][col]->reveal();
     revealed_Count++;
 
     auto emptyTile= dynamic_pointer_cast<EmptyTile>(grid[row][col]);
-    if(emptyTile){ // se for numero ou espaco vazio
-        if(emptyTile->getAdjacentBombs()> 0){ // se for numero
+    if(emptyTile){ //Se for numero ou espaco vazio
+        if(emptyTile->getAdjacentBombs()> 0){ //Se for numero (quadrado com bombas adjacentes)
             return;
         }
-        else{ // eh espaco vazio, realizar recursao
+        else{ // É um quadrado sem bombas adjacentes, "em branco".
             for(int i= -1; i<= 1; i++){
                 for(int j= -1;j<= 1; j++){
-                    if(i != 0 || j != 0){ // caso nao seja o mesmo quadrado
+                    if(i != 0 || j != 0){ // Caso não seja o mesmo quadrado
                         revealTile(row + i, col + j, revealed_Count);
                     }
                 }
             }
         }
     }
-    else{ // eh bomba, interrompe a recursao 
-        revealed_Count=-1; // acaba o jogo com derrota
+    else{ //É bomba, interrompe a recursao. Você morreu
+        revealed_Count=-1; //Acaba o jogo com derrota
         return;
     }
 }
 
-// type 1 : vazio, type 2 : bomba
+// Muda o valor de tile na grid
+// Type 1: Quadrado vazio
+// Type 2(else): Bomba
 void Board::setTile(int row, int col, int type) {
     if(type == 1) {
         grid[row][col] = make_shared<EmptyTile>();

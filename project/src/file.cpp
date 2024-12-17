@@ -25,6 +25,7 @@ void open_file(){
 void writeScoreToFile(const std::string& difficulty, const Player& player){
     std::ifstream main_file_op("../save/scores.txt"); // arquivo principal aberto
 
+    //Mensagem de erro 
     if(!main_file_op.is_open()){
         std::cout<<"Erro ao abrir o arquivo para leitura."<<std::endl;
         exit(-1);
@@ -34,29 +35,29 @@ void writeScoreToFile(const std::string& difficulty, const Player& player){
     std::string line_read, difficulty_aux;
     std::vector<Player> list_players;
 
-    // leitura do arquivo
+    //Leitura do arquivo
     while(std::getline(main_file_op, line_read)){
         if(line_read.empty()){
-           continue; // nao sei pq isso funciona
+           continue;
         } 
 
-        if(line_read== "easy"|| line_read== "medium"|| line_read== "hard"){ // leitura da dificuldade
+        if(line_read== "easy"|| line_read== "medium"|| line_read== "hard"){ //Leitura da dificuldade
             if(!difficulty_aux.empty()){
-                scores[difficulty_aux] = list_players; // salva a lista de jogadores anteriores na dificuldade anteriormente lida
+                scores[difficulty_aux] = list_players; //Salva a lista de jogadores anteriores na dificuldade anteriormente lida
             }
-            difficulty_aux= line_read; // atualiza a dificuldade processada
-            list_players.clear(); // limpa buffer
+            difficulty_aux= line_read; //Atualiza a dificuldade processada
+            list_players.clear(); //Limpa buffer
         } 
-        else{ // leitura dos jogadores na dificuldade anteriormente lida
+        else{ //Leitura dos jogadores na dificuldade anteriormente lida
             std::stringstream string_aux(line_read);
             Player ply_aux;
             int score;
-            string_aux >> score; // leitura do valor pontuacao
-            if(string_aux.fail()){ // Ignora linhas inválidas
+            string_aux >> score; //Leitura do valor pontuacao
+            if(string_aux.fail()){ //Ignora linhas inválidas
                 continue;
             }
 
-            ply_aux.addScore(score); // add score ao jogador
+            ply_aux.addScore(score); //Adiciona score ao jogador
 
             std::string name;
             std::getline(string_aux >> std::ws, name); // leitura do nome
@@ -109,3 +110,15 @@ void writeScoreToFile(const std::string& difficulty, const Player& player){
     outfile.close();
 }
 
+//Transforma a dificuldade de inteiro para string (para escrita no arquivo)
+std::string getDifficulty(int difficulty) {
+    if (difficulty == 0) {
+        return "easy";
+    } else if (difficulty == 1) {
+        return "medium";
+    } else if (difficulty == 2) {
+        return "hard";
+    } else {
+        return "Invalid difficulty"; // Caso o valor seja fora de 0, 1 ou 2
+    }
+}
