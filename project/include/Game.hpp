@@ -154,7 +154,8 @@ class Game {
                     auto end = std::chrono::high_resolution_clock::now();
                     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
                     player.addScore(duration);
-
+                    field.revealAllBombs();
+                    render_map();
                     writeScoreToFile(getDifficulty(difficulty), player);
                     read_after_game();
 
@@ -167,4 +168,5 @@ class Game {
         void flagInteraction(int row, int col);
 
         void gridChange(int row, int col); //Muda a posição de uma bomba. Chamada apenas se o primeiro clique for em uma bomba.
+        
 };

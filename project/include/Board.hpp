@@ -34,4 +34,6 @@ class Board
  
         //Funções do SFML
         void draw(sf::RenderWindow& window); //Desenha o tabuleiro
+
+        void revealAllBombs();
 };

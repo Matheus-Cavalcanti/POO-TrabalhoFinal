@@ -104,7 +104,18 @@ void Board::draw(sf::RenderWindow& window)
     }
 }
 
-void Board::revealTile(int row, int col, int& revealed_Count){
+void Board::revealAllBombs() {
+    for(int i = 0; i < rows; ++i){
+        for(int j = 0; j < cols; ++j){
+            if (grid[i][j] && dynamic_pointer_cast<BombTile>(grid[i][j])){
+                grid[i][j]->reveal();
+            }
+        }
+    }
+}
+
+void Board::revealTile(int row, int col, int &revealed_Count)
+{
     if(row < 0 || row >= rows || col < 0 || col >= cols){ // se estiver fora do tabuleiro ja criado
         return;
     }
@@ -142,7 +153,6 @@ void Board::revealTile(int row, int col, int& revealed_Count){
         revealed_Count=-1; // acaba o jogo com derrota
         return;
     }
-
 }
 
 // type 1 : vazio, type 2 : bomba
