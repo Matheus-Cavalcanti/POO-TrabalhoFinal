@@ -23,7 +23,7 @@ void Game::run() {
             //difficultyMenu() retorn a escolha de difculdade. Jogo é inicializado para cada dificuldade
             difficulty = difficultyMenu();
 
-            if(difficulty == -1) {
+            if(difficulty == 3) {
                 state = MainMenu;
             }
             else {
